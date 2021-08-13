@@ -1,4 +1,6 @@
 #!/bin/sh
+# SPDX-License-Identifier: GPL-2.0
+# (C) 2021 Carles Pey <cpey@pm.me>
 
 # Optional arguments:
 #  ./start-vm.sh -c smep
