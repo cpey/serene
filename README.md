@@ -7,7 +7,7 @@ Collection of scripts to automate VM creation for testing Linux kernel builds.
 ```
 $ git submodule update --init -- src/linux
 ```
-2. Create rootfs and local configurations
+2. Create rootfs and host configurations
 ```
 $ ./tools/create-rootfs.sh
 ```
