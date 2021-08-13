@@ -1,0 +1,9 @@
+[submodule "src/linux"]
+	path = src/linux
+	url = git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+[submodule "src/dropbear"]
+	path = src/dropbear
+	url = git@github.com:mkj/dropbear.git
+[submodule "src/busybox"]
+	path = src/busybox
+	url = git://git.busybox.net/busybox
