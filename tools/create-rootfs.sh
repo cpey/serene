@@ -1,10 +1,11 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-2.0
-# (C) 2021 Carles Pey <cpey@pm.me>
+# Copyright (C) 2021 Carles Pey <cpey@pm.me>
 
-set -x
+set -ex
 TOOLS_DIR=$(echo $0 | sed  "s/\(.*\)\(\/.*\)/\1/g")
 source $TOOLS_DIR/config.sh
+source $TOOLS_DIR/helper.sh
 BASE=$TOOLS_DIR/../rootfs
 IMG=$BASE/$ROOTFS_IMG
 DIR=$BASE/mount-point.dir
@@ -48,7 +49,7 @@ CONFIG_CMDS=(
     "passwd"
     "adduser --disabled-password --gecos \"\" $USER"
     "echo $USER:$PASSWD | chpasswd"
-    "apt install openssh-server sudo net-tools"
+    "apt install openssh-server sudo net-tools build-essential"
     "usermod -aG sudo $USER"
     "echo \"$USER    ALL= NOPASSWD: ALL\" >> /etc/sudoers"
     "echo -e \"allow-hotplug enp0s3\niface enp0s3 inet dhcp\" >> /etc/network/interfaces"
@@ -57,8 +58,12 @@ CONFIG_CMDS=(
 )
 
 for cmd in "${CONFIG_CMDS[@]}"; do
-    sudo chroot $DIR /bin/bash -c "$cmd"
+    while
+        sudo chroot $DIR /bin/bash -c "$cmd"
+        :; [[ $? -ne 0 ]]
+    do :; done
 done
 
 sudo umount $DIR
 rmdir $DIR
+

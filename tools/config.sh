@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-2.0
-# (C) 2021 Carles Pey <cpey@pm.me>
+# Copyright (C) 2021 Carles Pey <cpey@pm.me>
 
 USER=test
 PASSWD=test

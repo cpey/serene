@@ -1,6 +1,6 @@
 #!/bin/sh
 # SPDX-License-Identifier: GPL-2.0
-# (C) 2021 Carles Pey <cpey@pm.me>
+# Copyright (C) 2021 Carles Pey <cpey@pm.me>
 
 TOOLS_DIR=$(echo $0 | sed  "s/\(.*\)\(\/.*\)/\1/g")
 INITRAMFS_DIR=$TOOLS_DIR/../initramfs/
