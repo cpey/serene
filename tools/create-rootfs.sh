@@ -44,12 +44,26 @@ mkfs.ext4 $IMG
 sudo mount -o loop $IMG $DIR
 sudo debootstrap --arch $VM_ARCH $DEBIAN_VERSION $DIR
 
-# Configure the image
+# VM configuration
+INSTALL_PKG=(
+    openssh-server
+    sudo
+    net-tools
+    build-essential
+    libc6-dev
+    libc6-dev-i386
+    gdb
+)
+INSTALL_PKG_CMD="apt install"
+for pkg in "${INSTALL_PKG[@]}"; do
+    INSTALL_PKG_CMD="${INSTALL_PKG_CMD} $pkg"
+done
+
 CONFIG_CMDS=(
+    "$INSTALL_PKG_CMD"
     "passwd"
     "adduser --disabled-password --gecos \"\" $USER"
     "echo $USER:$PASSWD | chpasswd"
-    "apt install openssh-server sudo net-tools build-essential"
     "usermod -aG sudo $USER"
     "echo \"$USER    ALL= NOPASSWD: ALL\" >> /etc/sudoers"
     "echo -e \"allow-hotplug enp0s3\niface enp0s3 inet dhcp\" >> /etc/network/interfaces"
@@ -63,6 +77,10 @@ for cmd in "${CONFIG_CMDS[@]}"; do
         :; [[ $? -ne 0 ]]
     do :; done
 done
+
+# Remove previous build ssh server public key fingerprint
+cp  ~/.ssh/known_hosts ~/.ssh/known_hosts.old
+sed -i "/^\[localhost\]:$VM_PORT .*$/d" ~/.ssh/known_hosts
 
 sudo umount $DIR
 rmdir $DIR
