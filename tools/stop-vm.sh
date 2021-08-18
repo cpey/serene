@@ -14,7 +14,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         *)
-            echo "Invalid argument"
+            echo "Unrecognized option: $key"
             exit 1
             ;;
     esac
@@ -29,7 +29,7 @@ if [[ $force -eq 1 ]]; then
         kill $pid
     fi
 else
-    ssh $VM_NAME "sudo /usr/sbin/shutdown -h now"
+    ssh $VM_HOSTNAME "sudo /usr/sbin/shutdown -h now"
     if [[ $start -eq 1 ]]; then
         sleep 5
     fi

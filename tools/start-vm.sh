@@ -19,32 +19,26 @@ ROOTFS=$TOOLS_DIR/../rootfs/$ROOTFS_IMG
 CPU="kvm64"
 CMD_LINE="root=/dev/sda rw console=ttyS0"
 
-POSITIONAL=()
-while [[ $# -gt 0 ]]
-do
-key="$1"
-case $key in
-    -c|--cpu-sec)
-    MITIGATION="$2"
-    CPU=$CPU,$MITIGATION
-    shift # past argument
-    shift # past value
-    ;;
-    -k|--kernel-sec)
-    MITIGATION=`echo "$2" | sed "s/,/ /g"`
-    CMD_LINE="$CMD_LINE $MITIGATION"
-    shift # past argument
-    shift # past value
-    ;;
-    --default)
-    DEFAULT=YES
-    shift # past argument
-    ;;
-    *)    # unknown option
-    POSITIONAL+=("$1") # save it in an array for later
-    shift # past argument
-    ;;
-esac
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case $key in
+        -c|--cpu-sec)
+            MITIGATION="$2"
+            CPU=$CPU,$MITIGATION
+            shift
+            shift
+            ;;
+        -k|--kernel-sec)
+            MITIGATION=`echo "$2" | sed "s/,/ /g"`
+            CMD_LINE="$CMD_LINE $MITIGATION"
+            shift
+            shift
+            ;;
+        *)
+            echo "Unrecognized option: $key"
+            exit 1
+            ;;
+    esac
 done
 
 qemu-system-x86_64 \

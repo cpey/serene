@@ -33,5 +33,4 @@ fi
 
 cd $CWD
 $TOOLS_DIR/copy-linux-build.sh
-$TOOLS_DIR/stop-vm.sh
-$TOOLS_DIR/start-vm.sh
+$TOOLS_DIR/stop-vm.sh --reboot

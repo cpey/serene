@@ -23,7 +23,7 @@ fi
 SSH_KEY=~/.ssh/$SSH_KEY_NAME
 SSH_CONFIG=$(cat <<-EOM
 
-Host $VM_NAME
+Host $VM_HOSTNAME
     Hostname localhost
     Port $VM_PORT
     User $USER
@@ -69,6 +69,8 @@ CONFIG_CMDS=(
     "echo -e \"allow-hotplug enp0s3\niface enp0s3 inet dhcp\" >> /etc/network/interfaces"
     "mkdir /home/$USER/.ssh"
     "echo $SSH_KEY_PUB > /home/$USER/.ssh/authorized_keys"
+    "echo $VM_HOSTNAME > /etc/hostname"
+    "echo 127.0.1.1 $VM_HOSTNAME >> /etc/hosts"
 )
 
 for cmd in "${CONFIG_CMDS[@]}"; do
