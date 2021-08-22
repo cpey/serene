@@ -34,6 +34,14 @@ while [[ $# -gt 0 ]]; do
             shift
             shift
             ;;
+        -d|--debug)
+            DEBUG=1
+            shift
+            ;;
+        -w|--wait-debug)
+            WAIT_DEBUG=1
+            shift
+            ;;
         *)
             echo "Unrecognized option: $key"
             exit 1
@@ -41,7 +49,16 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+DEBUG_OPTS=''
+if (( $DEBUG )); then
+    DEBUG_OPTS=" -s"
+    if (( $WAIT_DEBUG )); then
+        DEBUG_OPTS+=" -S"
+    fi
+fi
+
 qemu-system-x86_64 \
+    $DEBUG_OPTS \
     -kernel $KERNEL_BUILD \
     -cpu $CPU \
     -drive file=$ROOTFS,index=0,media=disk,format=raw \
