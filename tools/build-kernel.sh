@@ -9,6 +9,10 @@ while [[ $# -gt 0 ]]; do
             defconfig=1
             shift
             ;;
+        -s|--start-vm)
+            startvm=1
+            shift
+            ;;
         *)
             echo "Invalid argument"
             exit 1
@@ -31,6 +35,11 @@ if [[ ! $? -eq 0 ]]; then
     exit -1
 fi
 
+stoparg=""
+if [[ -n $startvm ]]; then
+    stoparg="--reboot"
+fi
+
 cd $CWD
 $TOOLS_DIR/copy-linux-build.sh
-$TOOLS_DIR/stop-vm.sh --reboot
+$TOOLS_DIR/stop-vm.sh $stoparg
