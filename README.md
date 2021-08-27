@@ -76,10 +76,15 @@ kgdb_breakpoint () at kernel/debug/debug_core.c:1196
 (gdb)
 ```
 
-Serene uses kgdb since Qemu gdb server does not take care of interrupts while debugging. These are the .config symbols needed to enable kgdb:
+Serene uses kgdb since Qemu gdb server does not take care of interrupts while debugging. The kernel will need to be built the following .config options:
 
 ```
 CONFIG_KGDB=y
 CONFIG_KGDB_SERIAL_CONSOLE=y
 ```
 
+When the vm is launched without the `-w` flag, execute the following command from within the vm to enter kgdb before attaching the gdb client:
+
+```
+test@test:~$ sudo sh -c "echo g > /proc/sysrq-trigger"
+```
