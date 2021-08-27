@@ -51,9 +51,10 @@ done
 
 DEBUG_OPTS=''
 if (( $DEBUG )); then
-    DEBUG_OPTS=" -s"
+    DEBUG_OPTS+="-serial tcp::1234,server,nowait"
+    CMD_LINE+="console=ttyS0,115200 kgdboc=ttyS0,115200"
     if (( $WAIT_DEBUG )); then
-        DEBUG_OPTS+=" -S"
+        CMD_LINE+="console=ttyS0,115200 kgdboc=ttyS0,115200 kgdbwait"
     fi
 fi
 
@@ -66,4 +67,5 @@ qemu-system-x86_64 \
     -append "$CMD_LINE" \
     -nographic \
     -netdev user,id=net0,hostfwd=tcp::$VM_PORT-:22 \
-    -device e1000,netdev=net0 &
+    -device e1000,netdev=net0
+
