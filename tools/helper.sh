@@ -9,3 +9,9 @@ function trap_ctrlc ()
 }
 trap "trap_ctrlc" 2
 
+function get_path_hash ()
+{
+    local path=$(realpath $1)
+    local str=$(echo $path | sha256sum | cut -c1-16)
+    echo $str
+}

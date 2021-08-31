@@ -13,6 +13,11 @@ while [[ $# -gt 0 ]]; do
             startvm=1
             shift
             ;;
+        -l|--linux-src)
+            srctree=$2
+            shift
+            shift
+            ;;
         *)
             echo "Invalid argument"
             exit 1
@@ -21,7 +26,11 @@ while [[ $# -gt 0 ]]; do
 done
 
 TOOLS_DIR=$(echo $0 | sed  "s/\(.*\)\(\/.*\)/\1/g")
-LINUX_SRC=$TOOLS_DIR/../src/linux
+if [[ -v srctree ]]; then
+    LINUX_SRC=$srctree
+else
+    LINUX_SRC=$TOOLS_DIR/../src/linux
+fi
 CWD=$(pwd)
 
 cd $LINUX_SRC
@@ -41,5 +50,5 @@ if [[ -n $startvm ]]; then
 fi
 
 cd $CWD
-$TOOLS_DIR/copy-linux-build.sh
-$TOOLS_DIR/stop-vm.sh $stoparg
+$TOOLS_DIR/copy-linux-build.sh -l $LINUX_SRC
+$TOOLS_DIR/stop-vm.sh $stoparg -l $LINUX_SRC

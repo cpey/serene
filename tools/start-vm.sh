@@ -13,8 +13,7 @@
 
 TOOLS_DIR=$(echo $0 | sed  "s/\(.*\)\(\/.*\)/\1/g")
 source $TOOLS_DIR/config.sh
-KERNEL_BUILD=$TOOLS_DIR/../build/linux/arch/x86_64/boot/bzImage 
-ROOTFS=$TOOLS_DIR/../rootfs/$ROOTFS_IMG
+source $TOOLS_DIR/helper.sh
 
 CPU="kvm64"
 CMD_LINE="root=/dev/sda rw console=ttyS0"
@@ -42,12 +41,26 @@ while [[ $# -gt 0 ]]; do
             WAIT_DEBUG=1
             shift
             ;;
+        -l|--linux-src)
+            srctree=$2
+            shift
+            shift
+            ;;
         *)
             echo "Unrecognized option: $key"
             exit 1
             ;;
     esac
 done
+
+if [[ -v srctree ]]; then
+    LINUX_SRC=$srctree
+else
+    LINUX_SRC=$TOOLS_DIR/../src/linux
+fi
+LINUX_SRC_HASH=$(get_path_hash $LINUX_SRC)
+KERNEL_BUILD=$TOOLS_DIR/../build/linux/arch/x86_64/boot/bzImage-$LINUX_SRC_HASH
+ROOTFS=$TOOLS_DIR/../rootfs/$ROOTFS_IMG
 
 DEBUG_OPTS=''
 if (( $DEBUG )); then
