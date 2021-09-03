@@ -6,7 +6,7 @@ while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
         -l|--linux-src)
-            srctree=$2
+            srctree="$2"
             shift
             shift
             ;;
@@ -20,7 +20,7 @@ done
 TOOLS_DIR=$(echo $0 | sed  "s/\(.*\)\(\/.*\)/\1/g")
 source $TOOLS_DIR/helper.sh
 
-if [[ -v srctree ]]; then
+if [[ -n $srctree ]]; then
     LINUX_SRC=$srctree
 else
     LINUX_SRC=$TOOLS_DIR/../src/linux

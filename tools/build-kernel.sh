@@ -14,7 +14,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         -l|--linux-src)
-            srctree=$2
+            srctree="$2"
             shift
             shift
             ;;
@@ -26,7 +26,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 TOOLS_DIR=$(echo $0 | sed  "s/\(.*\)\(\/.*\)/\1/g")
-if [[ -v srctree ]]; then
+if [[ -n $srctree ]]; then
     LINUX_SRC=$srctree
 else
     LINUX_SRC=$TOOLS_DIR/../src/linux
@@ -51,4 +51,4 @@ fi
 
 cd $CWD
 $TOOLS_DIR/copy-linux-build.sh -l $LINUX_SRC
-$TOOLS_DIR/stop-vm.sh $stoparg -l $LINUX_SRC
+$TOOLS_DIR/stop-vm.sh $stoparg
