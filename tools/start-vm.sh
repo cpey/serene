@@ -16,7 +16,7 @@ source $TOOLS_DIR/config.sh
 source $TOOLS_DIR/helper.sh
 
 CPU="kvm64"
-CMD_LINE="root=/dev/sda rw console=ttyS0"
+CMD_LINE="root=/dev/sda rw console=ttyS0 no_hash_pointers"
 
 while [[ $# -gt 0 ]]; do
     key="$1"
