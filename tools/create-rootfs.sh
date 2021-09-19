@@ -65,6 +65,7 @@ CONFIG_CMDS=(
     "adduser --disabled-password --gecos \"\" $USER"
     "echo $USER:$PASSWD | chpasswd"
     "usermod -aG sudo $USER"
+    "usermod -aG systemd-journal $USER"
     "echo \"$USER    ALL= NOPASSWD: ALL\" >> /etc/sudoers"
     "echo -e \"allow-hotplug enp0s3\niface enp0s3 inet dhcp\" >> /etc/network/interfaces"
     "mkdir /home/$USER/.ssh"
