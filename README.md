@@ -57,11 +57,12 @@ $ ./tools/start-vm.sh -c smep,smap -k kpti=1,kaslr
 
 ## Debugging the Linux kernel
 
-Launch the vm in debug mode:
+The vm is launched in debug mode as shown below. Note that the same serial line is used for both console and debugger, for which the debugger will take over and we will not be seing the Linux console messages.
 
 ```
 [cpey@nuc dev]$ ./tools/start-vm.sh -d -w
 QEMU 4.2.1 monitor - type 'help' for more information
+(qemu)
 ```
 
 and connect a gdb client:

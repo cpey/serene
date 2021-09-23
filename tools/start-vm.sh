@@ -65,9 +65,9 @@ ROOTFS=$TOOLS_DIR/../rootfs/$ROOTFS_IMG
 DEBUG_OPTS=''
 if (( $DEBUG )); then
     DEBUG_OPTS+="-serial tcp::1234,server,nowait"
-    CMD_LINE+="console=ttyS0,115200 kgdboc=ttyS0,115200"
+    CMD_LINE+=" kgdboc=ttyS0,115200"
     if (( $WAIT_DEBUG )); then
-        CMD_LINE+="console=ttyS0,115200 kgdboc=ttyS0,115200 kgdbwait"
+        CMD_LINE+=" kgdbwait"
     fi
 fi
 
