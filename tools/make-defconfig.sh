@@ -2,10 +2,14 @@
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (C) 2021 Carles Pey <cpey@pm.me>
 
-
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
+        -d|--defconfig)
+            defconfig="$2"
+            shift
+            shift
+            ;;
         -l|--linux-src)
             srctree="$2"
             shift
@@ -27,6 +31,12 @@ fi
 CWD=`pwd`
 
 cd $LINUX_SRC
-make defconfig
-make x86_64_defconfig
-make kvm_guest.config
+export ARCH=x86
+if [[ -n defconfig ]]; then
+    make savedefconfig
+    cp defconfig arch/$ARCH/configs/$defconfig
+else
+    make defconfig
+    make x86_64_defconfig
+    make kvm_guest.config
+fi

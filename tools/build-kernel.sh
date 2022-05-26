@@ -5,8 +5,9 @@
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
-        -d|--default)
-            defconfig=1
+        -d|--defconfig)
+            defconfig="$2"
+            shift
             shift
             ;;
         -s|--start-vm)
@@ -31,14 +32,13 @@ if [[ -n $srctree ]]; then
 else
     LINUX_SRC=$TOOLS_DIR/../src/linux
 fi
-CWD=$(pwd)
+pushd $LINUX_SRC
 
-cd $LINUX_SRC
-if [[ -v defconfig ]]; then
-    yes "" | make -j`nproc`
-else
-    make -j`nproc`
+export ARCH=x86
+if [[ -n $defconfig ]]; then
+    make $defconfig
 fi
+make -j`nproc`
 
 if [[ ! $? -eq 0 ]]; then
     exit -1
@@ -49,6 +49,6 @@ if [[ -n $startvm ]]; then
     stoparg="--reboot"
 fi
 
-cd $CWD
+popd
 $TOOLS_DIR/copy-linux-build.sh -l $LINUX_SRC
 $TOOLS_DIR/stop-vm.sh $stoparg

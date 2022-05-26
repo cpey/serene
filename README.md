@@ -77,7 +77,7 @@ kgdb_breakpoint () at kernel/debug/debug_core.c:1196
 (gdb)
 ```
 
-Serene uses kgdb since Qemu gdb server does not take care of interrupts while debugging. The kernel will need to be built the following .config options:
+Serene uses kgdb since Qemu gdb server does not take care of interrupts while debugging. Build the kernel with the following .config options:
 
 ```
 CONFIG_KGDB=y

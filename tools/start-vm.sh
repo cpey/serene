@@ -16,6 +16,7 @@ source $TOOLS_DIR/config.sh
 source $TOOLS_DIR/helper.sh
 
 CPU="kvm64"
+RAM=512M
 CMD_LINE="root=/dev/sda rw console=ttyS0 no_hash_pointers"
 
 while [[ $# -gt 0 ]]; do
@@ -27,23 +28,23 @@ while [[ $# -gt 0 ]]; do
             shift
             shift
             ;;
+        -d|--debug)
+            DEBUG=1
+            shift
+            ;;
         -k|--kernel-sec)
             MITIGATION=`echo "$2" | sed "s/,/ /g"`
             CMD_LINE="$CMD_LINE $MITIGATION"
             shift
             shift
             ;;
-        -d|--debug)
-            DEBUG=1
+        -l|--linux-src)
+            srctree="$2"
+            shift
             shift
             ;;
         -w|--wait-debug)
             WAIT_DEBUG=1
-            shift
-            ;;
-        -l|--linux-src)
-            srctree="$2"
-            shift
             shift
             ;;
         *)
@@ -70,14 +71,15 @@ if (( $DEBUG )); then
         CMD_LINE+=" kgdbwait"
     fi
 fi
-
+echo Booting $KERNEL_BUILD
 qemu-system-x86_64 \
     $DEBUG_OPTS \
     -kernel $KERNEL_BUILD \
+    -m $RAM \
     -cpu $CPU \
     -drive file=$ROOTFS,index=0,media=disk,format=raw \
     -enable-kvm \
-    -append "$CMD_LINE" \
+    -append "$CMD_LINE -device vhost-vsock-pci,guest-cid=" \
     -nographic \
     -netdev user,id=net0,hostfwd=tcp::$VM_PORT-:22 \
     -device e1000,netdev=net0
