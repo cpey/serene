@@ -10,6 +10,11 @@ while [[ $# -gt 0 ]]; do
             shift
             shift
             ;;
+        -n|--kernel-name)
+            name="$2"
+            shift
+            shift
+            ;;
         *)
             echo "Invalid argument"
             exit 1
@@ -25,8 +30,14 @@ if [[ -n $srctree ]]; then
 else
     LINUX_SRC=$TOOLS_DIR/../src/linux
 fi
+
+if [[ -n $name ]]; then
+    SUFFIX=$name
+else
+    SUFFIX=$(get_path_hash $LINUX_SRC)
+fi
+
 LINUX_IMG=$LINUX_SRC/arch/x86_64/boot/bzImage
-LINUX_SRC_HASH=$(get_path_hash $LINUX_SRC)
 BUILD_DIR=$TOOLS_DIR/../build
 OUTDIR=$BUILD_DIR/linux/arch/x86_64/boot
 
@@ -34,4 +45,4 @@ if [[ ! -d $OUTDIR ]]; then
     mkdir -p $OUTDIR
 fi
  
-cp $LINUX_IMG $OUTDIR/bzImage-$LINUX_SRC_HASH
+cp $LINUX_IMG $OUTDIR/bzImage-$SUFFIX

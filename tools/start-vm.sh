@@ -43,6 +43,11 @@ while [[ $# -gt 0 ]]; do
             shift
             shift
             ;;
+        -n|--kernel-name)
+            name="$2"
+            shift
+            shift
+            ;;
         -w|--wait-debug)
             WAIT_DEBUG=1
             shift
@@ -59,8 +64,15 @@ if [[ -n $srctree ]]; then
 else
     LINUX_SRC=$TOOLS_DIR/../src/linux
 fi
+
+if [[ -n $name ]]; then
+    SUFFIX=$name
+else
+    SUFFIX=$(get_path_hash $LINUX_SRC)
+fi
+
 LINUX_SRC_HASH=$(get_path_hash $LINUX_SRC)
-KERNEL_BUILD=$TOOLS_DIR/../build/linux/arch/x86_64/boot/bzImage-$LINUX_SRC_HASH
+KERNEL_BUILD=$TOOLS_DIR/../build/linux/arch/x86_64/boot/bzImage-$SUFFIX
 ROOTFS=$TOOLS_DIR/../rootfs/$ROOTFS_IMG
 
 DEBUG_OPTS=''

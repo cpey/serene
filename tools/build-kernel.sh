@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (C) 2021 Carles Pey <cpey@pm.me>
 
+name=''
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
@@ -10,13 +11,18 @@ while [[ $# -gt 0 ]]; do
             shift
             shift
             ;;
-        -s|--start-vm)
-            startvm=1
-            shift
-            ;;
         -l|--linux-src)
             srctree="$2"
             shift
+            shift
+            ;;
+        -n|--kernel-name)
+            name="$2"
+            shift
+            shift
+            ;;
+        -s|--start-vm)
+            startvm=1
             shift
             ;;
         *)
@@ -50,5 +56,5 @@ if [[ -n $startvm ]]; then
 fi
 
 popd
-$TOOLS_DIR/copy-linux-build.sh -l $LINUX_SRC
+$TOOLS_DIR/copy-linux-build.sh -l $LINUX_SRC -n $name
 $TOOLS_DIR/stop-vm.sh $stoparg
