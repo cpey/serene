@@ -17,7 +17,7 @@ source $TOOLS_DIR/helper.sh
 
 CPU="kvm64"
 RAM=512M
-CMD_LINE="root=/dev/sda rw console=ttyS0 no_hash_pointers"
+CMD_LINE="root=/dev/sda rw console=ttyS0 no_hash_pointers kasan_multi_shot"
 
 while [[ $# -gt 0 ]]; do
     key="$1"
