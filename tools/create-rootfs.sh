@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (C) 2021 Carles Pey <cpey@pm.me>
 
@@ -41,6 +41,8 @@ SSH_KEY_PUB=$(cat $SSH_KEY.pub)
 # Create image
 qemu-img create $IMG 1g
 mkfs.ext4 $IMG
+DEVICE=$(losetup -l | grep $(basename $IMG) | cut -d' ' -f1)
+[[ ! $DEVICE == '' ]] && sudo umount $DEVICE
 sudo mount -o loop $IMG $DIR
 sudo debootstrap --arch $VM_ARCH $DEBIAN_VERSION $DIR
 
