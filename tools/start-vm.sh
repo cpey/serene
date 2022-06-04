@@ -44,7 +44,12 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         -n|--kernel-name)
-            name="$2"
+            suffix="$2"
+            shift
+            shift
+            ;;
+        -r|--root-fs)
+            rootfs="$2"
             shift
             shift
             ;;
@@ -59,21 +64,19 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-if [[ -n $srctree ]]; then
-    LINUX_SRC=$srctree
-else
-    LINUX_SRC=$TOOLS_DIR/../src/linux
+if [[ ! -n $srctree ]]; then
+    srctree=$TOOLS_DIR/../src/linux
 fi
 
-if [[ -n $name ]]; then
-    SUFFIX=$name
-else
-    SUFFIX=$(get_path_hash $LINUX_SRC)
+if [[ ! -n $suffix ]]; then
+    suffix=$(get_path_hash $srctree)
 fi
 
-LINUX_SRC_HASH=$(get_path_hash $LINUX_SRC)
-KERNEL_BUILD=$TOOLS_DIR/../build/linux/arch/x86_64/boot/bzImage-$SUFFIX
-ROOTFS=$TOOLS_DIR/../rootfs/$ROOTFS_IMG
+if [[ ! -n $rootfs ]]; then
+    rootfs=$TOOLS_DIR/../rootfs/$ROOTFS_IMG
+fi
+
+KERNEL_BUILD=$TOOLS_DIR/../build/linux/arch/x86_64/boot/bzImage-$suffix
 
 DEBUG_OPTS=''
 if (( $DEBUG )); then
@@ -89,7 +92,7 @@ qemu-system-x86_64 \
     -kernel $KERNEL_BUILD \
     -m $RAM \
     -cpu $CPU \
-    -drive file=$ROOTFS,index=0,media=disk,format=raw \
+    -drive file=$rootfs,index=0,media=disk,format=raw \
     -enable-kvm \
     -append "$CMD_LINE -device vhost-vsock-pci,guest-cid=" \
     -nographic \

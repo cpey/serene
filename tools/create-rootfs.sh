@@ -9,7 +9,6 @@ source $TOOLS_DIR/helper.sh
 BASE=$TOOLS_DIR/../rootfs
 IMG=$BASE/$ROOTFS_IMG
 DIR=$BASE/mount-point.dir
-HASHED_PASSWD=$(openssl passwd -crypt $PASSWD)
 
 if [[ ! -d $BASE ]]; then
     mkdir $BASE
@@ -39,7 +38,7 @@ fi
 SSH_KEY_PUB=$(cat $SSH_KEY.pub)
 
 # Create image
-qemu-img create $IMG 1g
+qemu-img create $IMG 2g
 mkfs.ext4 $IMG
 DEVICE=$(losetup -l | grep $(basename $IMG) | cut -d' ' -f1)
 [[ ! $DEVICE == '' ]] && sudo umount $DEVICE
