@@ -74,6 +74,7 @@ CONFIG_CMDS=(
     "echo $SSH_KEY_PUB > /home/$USER/.ssh/authorized_keys"
     "echo $VM_HOSTNAME > /etc/hostname"
     "echo 127.0.1.1 $VM_HOSTNAME >> /etc/hosts"
+    "echo \"kernel.perf_event_paranoid=1\" >> /etc/sysctl.d/99-sysctl.conf"
 )
 
 for cmd in "${CONFIG_CMDS[@]}"; do
