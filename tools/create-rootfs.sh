@@ -75,6 +75,7 @@ CONFIG_CMDS=(
     "echo $VM_HOSTNAME > /etc/hostname"
     "echo 127.0.1.1 $VM_HOSTNAME >> /etc/hosts"
     "echo \"kernel.perf_event_paranoid=1\" >> /etc/sysctl.d/99-sysctl.conf"
+    "sed -Ei 's/(Options=).*/\1mode=0755/' /usr/lib/systemd/system/sys-kernel-debug.mount"
 )
 
 for cmd in "${CONFIG_CMDS[@]}"; do
