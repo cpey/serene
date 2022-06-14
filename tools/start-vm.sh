@@ -79,9 +79,10 @@ fi
 KERNEL_BUILD=$TOOLS_DIR/../build/linux/arch/x86_64/boot/bzImage-$suffix
 
 DEBUG_OPTS=''
+KVM_OPTS=''
 if (( $DEBUG )); then
-    DEBUG_OPTS+="-serial tcp::1234,server,nowait"
-    CMD_LINE+=" kgdboc=ttyS0,115200"
+    DEBUG_OPTS+="-serial tcp::1234,server,nowait -smp 1"
+    CMD_LINE+=" kgdboc=ttyS0,115200 nokaslr"
     if (( $WAIT_DEBUG )); then
         CMD_LINE+=" kgdbwait"
     fi
@@ -89,11 +90,12 @@ fi
 echo Booting $KERNEL_BUILD
 qemu-system-x86_64 \
     $DEBUG_OPTS \
+    $KVM_OPTS \
     -kernel $KERNEL_BUILD \
     -m $RAM \
     -cpu $CPU \
-    -drive file=$rootfs,index=0,media=disk,format=raw \
     -enable-kvm \
+    -drive file=$rootfs,index=0,media=disk,format=raw \
     -append "$CMD_LINE -device vhost-vsock-pci,guest-cid=" \
     -nographic \
     -netdev user,id=net0,hostfwd=tcp::$VM_PORT-:22 \
