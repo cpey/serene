@@ -86,6 +86,8 @@ if (( $DEBUG )); then
     if (( $WAIT_DEBUG )); then
         CMD_LINE+=" kgdbwait"
     fi
+else
+    KVM_OPTS="-enable-kvm"
 fi
 echo Booting $KERNEL_BUILD
 qemu-system-x86_64 \
@@ -94,7 +96,6 @@ qemu-system-x86_64 \
     -kernel $KERNEL_BUILD \
     -m $RAM \
     -cpu $CPU \
-    -enable-kvm \
     -drive file=$rootfs,index=0,media=disk,format=raw \
     -append "$CMD_LINE -device vhost-vsock-pci,guest-cid=" \
     -nographic \
