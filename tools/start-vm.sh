@@ -32,6 +32,11 @@ while [[ $# -gt 0 ]]; do
             DEBUG=1
             shift
             ;;
+        -e|--extra)
+            EXTRA="$2"
+            shift
+            shift
+            ;;
         -k|--kernel-sec)
             MITIGATION=`echo "$2" | sed "s/,/ /g"`
             CMD_LINE="$CMD_LINE $MITIGATION"
@@ -45,6 +50,11 @@ while [[ $# -gt 0 ]]; do
             ;;
         -n|--kernel-name)
             suffix="$2"
+            shift
+            shift
+            ;;
+        -q|--qemu-bin)
+            QEMU="$2"
             shift
             shift
             ;;
@@ -76,6 +86,10 @@ if [[ ! -n $rootfs ]]; then
     rootfs=$TOOLS_DIR/../rootfs/$ROOTFS_IMG
 fi
 
+if [[ ! -n $QEMU ]]; then
+    QEMU=qemu-system-x86_64
+fi
+
 KERNEL_BUILD=$TOOLS_DIR/../build/linux/arch/x86_64/boot/bzImage-$suffix
 
 DEBUG_OPTS=''
@@ -90,7 +104,7 @@ else
     KVM_OPTS="-enable-kvm"
 fi
 echo Booting $KERNEL_BUILD
-qemu-system-x86_64 \
+$QEMU \
     $DEBUG_OPTS \
     $KVM_OPTS \
     -kernel $KERNEL_BUILD \
@@ -100,5 +114,6 @@ qemu-system-x86_64 \
     -append "$CMD_LINE -device vhost-vsock-pci,guest-cid=" \
     -nographic \
     -netdev user,id=net0,hostfwd=tcp::$VM_PORT-:22 \
-    -device e1000,netdev=net0
+    -device e1000,netdev=net0 \
+    ${EXTRA}
 

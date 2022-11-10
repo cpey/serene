@@ -37,7 +37,8 @@ else
     SUFFIX=$(get_path_hash $LINUX_SRC)
 fi
 
-LINUX_IMG=$LINUX_SRC/arch/x86_64/boot/bzImage
+BZIMAGE=$LINUX_SRC/arch/x86_64/boot/bzImage
+VMLINUX=$LINUX_SRC/vmlinux
 BUILD_DIR=$TOOLS_DIR/../build
 OUTDIR=$BUILD_DIR/linux/arch/x86_64/boot
 
@@ -45,4 +46,5 @@ if [[ ! -d $OUTDIR ]]; then
     mkdir -p $OUTDIR
 fi
  
-cp $LINUX_IMG $OUTDIR/bzImage-$SUFFIX
+cp $BZIMAGE $OUTDIR/bzImage-$SUFFIX
+cp $VMLINUX $OUTDIR/vmlinux-$SUFFIX
