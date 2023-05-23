@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 MODULE=$1
 DEVICE=$2

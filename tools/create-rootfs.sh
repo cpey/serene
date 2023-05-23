@@ -19,6 +19,7 @@ if [[ ! -d $DIR ]]; then
 fi
 
 # Setup SSH key
+SSH_CONFIG_FILE=~/.ssh/config
 SSH_KEY=~/.ssh/$SSH_KEY_NAME
 SSH_CONFIG=$(cat <<-EOM
 
@@ -32,8 +33,8 @@ EOM
 
 if [[ ! -e $SSH_KEY ]]; then
     ssh-keygen -t ed25519 -f $SSH_KEY -N ''
-    cp ~/.ssh/config ~/.ssh/config.old
-    echo "$SSH_CONFIG" >> ~/.ssh/config
+    [[ ! -e $SSH_CONFIG_FILE ]] && cp $SSH_CONFIG_FILE $SSH_CONFIG_FILE.old
+    echo "$SSH_CONFIG" >> $SSH_CONFIG_FILE
 fi
 SSH_KEY_PUB=$(cat $SSH_KEY.pub)
 

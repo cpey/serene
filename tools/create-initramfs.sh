@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (C) 2021 Carles Pey <cpey@pm.me>
 
@@ -17,14 +17,14 @@ cp -av $BUSYBOX/* .
 
 # init
 cat > $INITRAMFS_TREE/init << EOF
-#!/bin/sh
+#!/bin/bash
 
 mount -t proc none /proc
 mount -t sysfs none /sys
 
 echo -e "\nBoot took $(cut -d' ' -f1 /proc/uptime) seconds\n"
 
-exec /bin/sh
+exec /bin/bash
 EOF
 chmod +x $INITRAMFS_TREE/init
 
