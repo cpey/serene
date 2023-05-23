@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (C) 2021 Carles Pey <cpey@pm.me>
 
@@ -22,6 +22,11 @@ CMD_LINE="root=/dev/sda rw console=ttyS0 no_hash_pointers kasan_multi_shot"
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
+        -a|--arch)
+            arch="$2"
+            shift
+            shift
+            ;;
         -c|--cpu-sec)
             MITIGATION="$2"
             CPU=$CPU,$MITIGATION
@@ -86,8 +91,20 @@ if [[ ! -n $rootfs ]]; then
     rootfs=$TOOLS_DIR/../rootfs/$ROOTFS_IMG
 fi
 
+arch=$(get_arch $arch)
+if [[ $arch == x86 ]]; then
+    arch=x86_64
+else
+    arch=aarch64
+    if [[ -n $EXTRA ]]; then
+        EXTRA=${EXTRA}"; -M virt"
+    else
+        EXTRA="-M virt"
+    fi
+fi
+
 if [[ ! -n $QEMU ]]; then
-    QEMU=qemu-system-x86_64
+    QEMU=qemu-system-$arch
 fi
 
 KERNEL_BUILD=$TOOLS_DIR/../build/linux/arch/x86_64/boot/bzImage-$suffix

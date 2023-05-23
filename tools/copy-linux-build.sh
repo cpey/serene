@@ -1,10 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (C) 2021 Carles Pey <cpey@pm.me>
+
 
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
+        -a|--arch)
+            arch="$2"
+            shift
+            shift
+            ;;
         -l|--linux-src)
             srctree="$2"
             shift
@@ -37,10 +43,17 @@ else
     SUFFIX=$(get_path_hash $LINUX_SRC)
 fi
 
-BZIMAGE=$LINUX_SRC/arch/x86_64/boot/bzImage
-VMLINUX=$LINUX_SRC/vmlinux
+arch=$(get_arch $arch)
+if [[ $arch == x86 ]]; then
+    $arch=x86_64
+    BZIMAGE=$LINUX_SRC/arch/$arch/boot/bzImage
+else
+    BZIMAGE=$LINUX_SRC/arch/arm64/boot/Image
+fi
+
 BUILD_DIR=$TOOLS_DIR/../build
-OUTDIR=$BUILD_DIR/linux/arch/x86_64/boot
+OUTDIR=$BUILD_DIR/linux/arch/$arch/boot
+VMLINUX=$LINUX_SRC/vmlinux
 
 if [[ ! -d $OUTDIR ]]; then
     mkdir -p $OUTDIR

@@ -1,11 +1,20 @@
-#!/bin/sh
+#!/bin/bash
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (C) 2021 Carles Pey <cpey@pm.me>
+
+
+TOOLS_DIR=$(echo $0 | sed  "s/\(.*\)\(\/.*\)/\1/g")
+source $TOOLS_DIR/helper.sh
 
 name=''
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
+        -a|--arch)
+            arch="$2"
+            shift
+            shift
+            ;;
         -d|--defconfig)
             defconfig="$2"
             shift
@@ -32,7 +41,6 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-TOOLS_DIR=$(echo $0 | sed  "s/\(.*\)\(\/.*\)/\1/g")
 if [[ -n $srctree ]]; then
     LINUX_SRC=$srctree
 else
@@ -40,7 +48,9 @@ else
 fi
 pushd $LINUX_SRC
 
-export ARCH=x86
+arch=$(get_arch $arch)
+export ARCH=$arch
+
 if [[ -n $defconfig ]]; then
     make $defconfig
 fi
@@ -56,5 +66,5 @@ if [[ -n $startvm ]]; then
 fi
 
 popd
-$TOOLS_DIR/copy-linux-build.sh -l $LINUX_SRC -n $name
+$TOOLS_DIR/copy-linux-build.sh -l $LINUX_SRC -n $name -a $arch
 $TOOLS_DIR/stop-vm.sh $stoparg
