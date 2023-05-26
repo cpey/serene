@@ -56,6 +56,7 @@ INSTALL_PKG=(
     libc6-dev-i386
     gdb
     strace
+    haveged
 )
 INSTALL_PKG_CMD="apt install"
 for pkg in "${INSTALL_PKG[@]}"; do

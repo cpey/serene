@@ -32,7 +32,7 @@ CWD=`pwd`
 
 cd $LINUX_SRC
 export ARCH=x86
-if [[ -n defconfig ]]; then
+if [[ -n $defconfig ]]; then
     make savedefconfig
     cp defconfig arch/$ARCH/configs/$defconfig
 else
