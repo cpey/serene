@@ -17,7 +17,7 @@ source $TOOLS_DIR/helper.sh
 
 CPU="kvm64"
 RAM=512M
-CMD_LINE="root=/dev/sda rw console=ttyS0 no_hash_pointers kasan_multi_shot"
+CMD_LINE="root=/dev/sda rw console=ttyS0 no_hash_pointers kasan_multi_shot net.ifnames=0 biosdevname=0"
 
 while [[ $# -gt 0 ]]; do
     key="$1"
@@ -111,7 +111,8 @@ $QEMU \
     -m $RAM \
     -cpu $CPU \
     -drive file=$rootfs,index=0,media=disk,format=raw \
-    -append "$CMD_LINE -device vhost-vsock-pci,guest-cid=" \
+    -append "$CMD_LINE" \
+    -device vhost-vsock-pci,guest-cid=3 \
     -nographic \
     -netdev user,id=net0,hostfwd=tcp::$VM_PORT-:22 \
     -device e1000,netdev=net0 \

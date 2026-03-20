@@ -71,7 +71,7 @@ CONFIG_CMDS=(
     "usermod -aG sudo $USER"
     "usermod -aG systemd-journal $USER"
     "echo \"$USER    ALL= NOPASSWD: ALL\" >> /etc/sudoers"
-    "echo -e \"allow-hotplug enp0s3\niface enp0s3 inet dhcp\" >> /etc/network/interfaces"
+    "echo -e \"allow-hotplug eth0\niface eth0 inet dhcp\" >> /etc/network/interfaces"
     "mkdir /home/$USER/.ssh"
     "echo $SSH_KEY_PUB > /home/$USER/.ssh/authorized_keys"
     "echo $VM_HOSTNAME > /etc/hostname"
