@@ -39,6 +39,7 @@ fi
 
 BZIMAGE=$LINUX_SRC/arch/x86_64/boot/bzImage
 VMLINUX=$LINUX_SRC/vmlinux
+CONFIG=$LINUX_SRC/.config
 BUILD_DIR=$TOOLS_DIR/../build
 OUTDIR=$BUILD_DIR/linux/arch/x86_64/boot
 
@@ -48,3 +49,4 @@ fi
  
 cp $BZIMAGE $OUTDIR/bzImage-$SUFFIX
 cp $VMLINUX $OUTDIR/vmlinux-$SUFFIX
+cp $CONFIG $OUTDIR/config-$SUFFIX

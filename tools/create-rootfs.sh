@@ -39,7 +39,7 @@ fi
 SSH_KEY_PUB=$(cat $SSH_KEY.pub)
 
 # Create image
-qemu-img create $IMG 2g
+qemu-img create $IMG 10g
 mkfs.ext4 $IMG
 DEVICE=$(losetup -l | grep $(basename $IMG) | cut -d' ' -f1)
 [[ ! $DEVICE == '' ]] && sudo umount $DEVICE
