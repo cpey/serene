@@ -40,6 +40,8 @@ fi
 BZIMAGE=$LINUX_SRC/arch/x86_64/boot/bzImage
 VMLINUX=$LINUX_SRC/vmlinux
 CONFIG=$LINUX_SRC/.config
+HEADER_ARCH=arch/x86/include
+HEADER_BASE=include
 BUILD_DIR=$TOOLS_DIR/../build
 OUTDIR=$BUILD_DIR/linux/arch/x86_64/boot
 
@@ -50,3 +52,6 @@ fi
 cp $BZIMAGE $OUTDIR/bzImage-$SUFFIX
 cp $VMLINUX $OUTDIR/vmlinux-$SUFFIX
 cp $CONFIG $OUTDIR/config-$SUFFIX
+tar czvf $OUTDIR/headers-arch-$SUFFIX.tgz -C $LINUX_SRC $HEADER_ARCH
+tar czvf $OUTDIR/headers-base-$SUFFIX.tgz -C $LINUX_SRC $HEADER_BASE
+
