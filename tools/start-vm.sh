@@ -16,7 +16,9 @@ source $TOOLS_DIR/config.sh
 source $TOOLS_DIR/helper.sh
 
 CPU="kvm64"
-RAM=512M
+CORES=2
+THREADS=2
+RAM=2048M
 CMD_LINE="root=/dev/sda rw console=ttyS0 no_hash_pointers kasan_multi_shot net.ifnames=0 biosdevname=0"
 
 while [[ $# -gt 0 ]]; do
@@ -110,6 +112,7 @@ $QEMU \
     -kernel $KERNEL_BUILD \
     -m $RAM \
     -cpu $CPU \
+    -smp cores=$CORES,threads=$THREADS \
     -drive file=$rootfs,index=0,media=disk,format=raw \
     -append "$CMD_LINE" \
     -device vhost-vsock-pci,guest-cid=3 \
